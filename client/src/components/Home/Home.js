@@ -300,7 +300,7 @@ class Home extends Component {
       signUpPassword,
       signUpError,
       addLink,
-      uniqueId
+      // uniqueId
     } = this.state;
 
     if (isLoading) {
