@@ -16,7 +16,12 @@ const ArticlesSchema = new mongoose.Schema({
   uniqueId: {
     type: String,
     default: ''  
-  }
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now()
+  },
+  
 });
 
 module.exports = mongoose.model('Articles', ArticlesSchema);

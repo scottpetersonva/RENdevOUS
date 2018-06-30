@@ -5,8 +5,11 @@ import {
   getFromStorage,
 } from '../../utils/storage';
 
-// const cheerio = require("cheerio");
-// const request = require("request");
+// const cheerio = require('react-native-cheerio')
+
+const cheerio = require("cheerio");
+const request = require("request");
+
 
 class Home extends Component {
   constructor(props) {
@@ -26,7 +29,8 @@ class Home extends Component {
       signUpEmail: '',
       signUpPassword: '',
       dashboad: '',
-      addLink: ''
+      addLink: '',
+      results: []
 
     };
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
@@ -45,7 +49,7 @@ class Home extends Component {
 
     this.onSignIn = this.onSignIn.bind(this)
     this.onSignUp = this.onSignUp.bind(this)
-    this.addLink = this.addLink.bind(this)
+    this.onAddLink = this.onAddLink.bind(this)
     this.logout = this.logout.bind(this)
   }
 
@@ -209,16 +213,69 @@ class Home extends Component {
       })
   }
 
-  addLink() {
+  onAddLink() {
     // grab state
     const {
       addLink,
       token,
+      results
     } = this.state;
 
-    // this.setState({
-    //   isLoading: true,
-    // })
+    
+
+    
+    // var cheerio = require("cheerio");
+    // var request = require("request");
+    
+    var article = addLink
+    console.log("the article is: ", article)
+    
+    // Make a request call to grab the HTML body from the site of your choice
+    request("https://cors-anywhere.herokuapp.com/" + article, function(error, response, html) {
+    
+      // Load the HTML into cheerio and save it to a variable
+      // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+      var $ = cheerio.load(html);
+    
+      // An empty array to save the data that we'll scrape
+    
+      // Select each element in the HTML body from which you want information.
+      // NOTE: Cheerio selectors function similarly to jQuery's selectors,
+      // but be sure to visit the package's npm page to see how it works
+      $("head").each(function(i, body) {
+    
+        var $ = cheerio.load(body);
+        var title = $("title").text();
+    
+        // Save these results in an object that we'll push into the results array we defined earlier
+        results.push({
+          title
+        });
+      });
+    
+      $("body").each(function(i, body) {
+    
+        var $ = cheerio.load(body);
+        var image = $("img").attr("src")
+    
+        // Save these results in an object that we'll push into the results array we defined earlier
+        results.push({
+          image
+        });
+      });
+    
+      
+    
+      // Log the results once you've looped through each of the elements found with cheerio
+      
+      console.log('--------------------------------------------');
+      console.log('TITLE: ' + results[0].title)
+      console.log('IMAGE: ' + results[1].image);
+      console.log('--------------------------------------------');
+    });
+    
+
+    console.log(results)
 
     // post request to backend
     fetch('/api/account/addarticle', {
@@ -227,8 +284,11 @@ class Home extends Component {
         'Content-Type': "application/json"
       },
 
+
       body: JSON.stringify({
         link: addLink,
+        // title: results[0],
+        // imageLink: results[1],
         uniqueId: token
       }),
     }).then(res => res.json())
@@ -403,7 +463,7 @@ class Home extends Component {
                   value={addLink}
                   onChange={this.onTextBoxChangeAddLink} />
                 <br /><br />
-                <button className='btn' onClick={this.addLink}>Save Article</button>
+                <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
               </div>
             </div>

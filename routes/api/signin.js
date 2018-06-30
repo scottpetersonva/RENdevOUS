@@ -1,6 +1,7 @@
 const User = require('../../models/User')
 const UserSession = require('../../models/UserSession')
 const Articles = require('../../models/Articles')
+// const cheerio = require('cheerio')
 
 module.exports = (app) => {
 
@@ -238,8 +239,8 @@ module.exports = (app) => {
         console.log('body', body)
         const {
                 link,
-            // title,
-            // articleImage,
+            title,
+            imageLink,
             uniqueId
         } = body;
         // let {
@@ -259,8 +260,8 @@ module.exports = (app) => {
 
         Articles.updateOne({
             link: link,
-            // title: title,
-            // imageLink: imageLink,
+            // title: results[0],
+            // imageLink: results[1],
             uniqueId: uniqueId,
         },
             (err, previousUsers) => {
@@ -281,8 +282,8 @@ module.exports = (app) => {
                 const newArticle = new Articles()
 
                 newArticle.link = link;
-                // newArticle.title = title;
-                // newAticle.imageLink = imageLink;
+                newArticle.title = title;
+                newArticle.imageLink = imageLink;
                 newArticle.uniqueId = uniqueId
 
                 newArticle.save((err, user) => {
@@ -300,6 +301,7 @@ module.exports = (app) => {
             });
     });
 
+    
     
 
 };
