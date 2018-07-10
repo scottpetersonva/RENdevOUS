@@ -30,9 +30,11 @@ class Home extends Component {
       signUpPassword: '',
       dashboad: '',
       addLink: '',
-      results: []
+      results: [],
+      appendArticles: []
 
     };
+
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
 
     this.onTextBoxChangeSignInPassword = this.onTextBoxChangeSignInPassword.bind(this);
@@ -51,6 +53,7 @@ class Home extends Component {
     this.onSignUp = this.onSignUp.bind(this)
     this.onAddLink = this.onAddLink.bind(this)
     this.logout = this.logout.bind(this)
+    console.log(this)
   }
 
   componentDidMount() {
@@ -59,7 +62,7 @@ class Home extends Component {
     if (obj && obj.token) {
       const { token } = obj
       // verify token
-      fetch('/api/account/verify?token=' + token)
+      fetch('/api/verify?token=' + token)
         .then(res => res.json())
         .then(json => {
           if (json.success) {
@@ -78,6 +81,7 @@ class Home extends Component {
       this.setState({
         isLoading: false,
       })
+
     }
   }
 
@@ -124,6 +128,7 @@ class Home extends Component {
     });
   }
 
+
   onSignUp() {
     // grab state
     const {
@@ -138,7 +143,7 @@ class Home extends Component {
     })
 
     // post request to backend
-    fetch('/api/account/signup', {
+    fetch('/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
@@ -183,7 +188,7 @@ class Home extends Component {
     })
 
     // post request to backend
-    fetch('/api/account/signin', {
+    fetch('/api/signin', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
@@ -217,68 +222,84 @@ class Home extends Component {
     // grab state
     const {
       addLink,
-      token,
+      // token,
       results
     } = this.state;
 
-    
+    const self = this
 
-    
-    // var cheerio = require("cheerio");
-    // var request = require("request");
-    
-    var article = addLink
-    console.log("the article is: ", article)
-    
+
+
+
+
+    console.log("the article is: ", addLink)
+
     // Make a request call to grab the HTML body from the site of your choice
-    request("https://cors-anywhere.herokuapp.com/" + article, function(error, response, html) {
-    
+    request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
+
       // Load the HTML into cheerio and save it to a variable
       // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
       var $ = cheerio.load(html);
-    
+
       // An empty array to save the data that we'll scrape
-    
+
       // Select each element in the HTML body from which you want information.
       // NOTE: Cheerio selectors function similarly to jQuery's selectors,
       // but be sure to visit the package's npm page to see how it works
-      $("head").each(function(i, body) {
-    
+      $("head").each(function (i, body) {
+
         var $ = cheerio.load(body);
         var title = $("title").text();
-    
+
         // Save these results in an object that we'll push into the results array we defined earlier
         results.push({
           title
         });
+
       });
-    
-      $("body").each(function(i, body) {
-    
+
+      $("body").each(function (i, body) {
+
         var $ = cheerio.load(body);
         var image = $("img").attr("src")
-    
+
         // Save these results in an object that we'll push into the results array we defined earlier
         results.push({
           image
         });
+
+
       });
-    
-      
-    
       // Log the results once you've looped through each of the elements found with cheerio
-      
+
       console.log('--------------------------------------------');
       console.log('TITLE: ' + results[0].title)
       console.log('IMAGE: ' + results[1].image);
       console.log('--------------------------------------------');
-    });
-    
+      self.postToDb()
+    })
 
-    console.log(results)
+  }
 
-    // post request to backend
-    fetch('/api/account/addarticle', {
+
+  // console.log(this.state)
+  // console.log(results)
+
+
+
+  // post request to backend
+
+  postToDb() {
+
+    const {
+      addLink,
+      token,
+      results,
+      // appendArticles
+
+    } = this.state;
+
+    fetch('/api/addarticle', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
@@ -287,28 +308,76 @@ class Home extends Component {
 
       body: JSON.stringify({
         link: addLink,
-        // title: results[0],
-        // imageLink: results[1],
+        title: results[0].title,
+        imageLink: results[1].image,
         uniqueId: token
       }),
-    }).then(res => res.json())
+    })
+      .then(res => res.json())
       .then(json => {
-        console.log('json', json)
+        // console.log('json', json)
         // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
-        console.log('token', token)
+        // console.log('token', token)
         if (json.success) {
           this.setState({
             addLink: '',
+            results: [],
           })
+        } else {
+          this.setState({
+            // signUpError: json.message,
+
+            isLoading: false,
+          })
+        }
+      })
+
+    this.renderArticles()
+
+  }
+
+
+  renderArticles() {
+    // grab state
+    // let {
+    //   appendArticles
+    // } = this.state;
+
+
+    fetch('/api/appendarticle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json"
+      },
+
+    })
+      .then(res => res.json())
+      .then(json => {
+        // console.log('this json!!!!!! json', json)
+        // appendArticles = json
+        // json = JSON.stringify(json)
+        console.log('here!!!!' + json)
+        if (json) {
+
+          console.log("success")
+          this.setState({appendArticles: json})
+
+          console.log(this.state)
         } else {
           this.setState({
             // signUpError: json.message,
             isLoading: false,
           })
         }
-      })
-  }
 
+
+      })
+
+    // console.log(this.state)
+
+
+    console.log("articles: ", this.state)
+  }
 
   logout() {
     this.setState({
@@ -319,7 +388,7 @@ class Home extends Component {
     if (obj && obj.token) {
       const { token } = obj
       // verify token
-      fetch('/api/account/logout?token=' + token)
+      fetch('/api/logout?token=' + token)
         .then(res => res.json())
         .then(json => {
           if (json.success) {
@@ -465,7 +534,13 @@ class Home extends Component {
                 <br /><br />
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
+                {this.state.appendArticles.map(article =>
+                
+                  <div>
+                  <img src={article.imageLink}/>
+                  <a href={article.link} target="_blank">{article.title}</a></div>)}
               </div>
+              
             </div>
           </div>
         </div>
