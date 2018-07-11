@@ -10,6 +10,16 @@ import {
 const cheerio = require("cheerio");
 const request = require("request");
 
+// const imageStyle = {
+//   height: '200px',
+//   width: '200px',
+//   padding: '2px'
+// }
+
+const descriptionTextStyle = {
+  color: 'black',
+}
+
 
 class Home extends Component {
   constructor(props) {
@@ -53,6 +63,7 @@ class Home extends Component {
     this.onSignUp = this.onSignUp.bind(this)
     this.onAddLink = this.onAddLink.bind(this)
     this.logout = this.logout.bind(this)
+    // this.deleteFromDb = this.deleteFromDb.bind(this)
     console.log(this)
   }
 
@@ -216,6 +227,8 @@ class Home extends Component {
           })
         }
       })
+    this.renderArticles()
+
   }
 
   onAddLink() {
@@ -228,11 +241,48 @@ class Home extends Component {
 
     const self = this
 
+    // console.log("the article is: ", addLink)
 
+    function checkLink() {
+      var str = addLink;
 
+      if (str.includes("youtube")) {
+        request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
 
+      var $ = cheerio.load(html);
 
-    console.log("the article is: ", addLink)
+      $("body").each(function(i, body) {
+    
+        var $ = cheerio.load(body);
+        var title = $('h1').children().text()
+        var image = $('meta[property="og:image"]').attr('content');
+        var description = $('meta[property="og:description"]').attr('content');
+    
+        // Save these results in an object that we'll push into the results array we defined earlier
+        results.push({
+        title
+        });
+
+        results.push({
+          image
+          });
+
+          results.push({
+            description
+            });
+      });
+      // Log the results once you've looped through each of the elements found with cheerio
+
+      console.log('--------------------------------------------');
+      console.log('TITLE: ' + results[0].title)
+      console.log('IMAGE: ' + results[1].image);
+      console.log('IMAGE: ' + results[2].description);
+      console.log('--------------------------------------------');
+      self.postToDb()
+    })
+      }
+      else {
+  
 
     // Make a request call to grab the HTML body from the site of your choice
     request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
@@ -246,39 +296,39 @@ class Home extends Component {
       // Select each element in the HTML body from which you want information.
       // NOTE: Cheerio selectors function similarly to jQuery's selectors,
       // but be sure to visit the package's npm page to see how it works
-      $("head").each(function (i, body) {
-
+      $("head").each(function(i, body) {
+    
         var $ = cheerio.load(body);
-        var title = $("title").text();
-
+        var title = $('meta[property="og:title"]').attr('content');
+        var image = $('meta[property="og:image"]').attr('content');
+        var description = $('meta[property="og:description"]').attr('content');
+    
         // Save these results in an object that we'll push into the results array we defined earlier
         results.push({
-          title
+        title
         });
 
-      });
-
-      $("body").each(function (i, body) {
-
-        var $ = cheerio.load(body);
-        var image = $("img").attr("src")
-
-        // Save these results in an object that we'll push into the results array we defined earlier
         results.push({
           image
-        });
+          });
 
-
+          results.push({
+            description
+            });
       });
       // Log the results once you've looped through each of the elements found with cheerio
 
       console.log('--------------------------------------------');
       console.log('TITLE: ' + results[0].title)
       console.log('IMAGE: ' + results[1].image);
+      console.log('IMAGE: ' + results[2].description);
       console.log('--------------------------------------------');
       self.postToDb()
     })
+  }
+}
 
+checkLink()
   }
 
 
@@ -310,6 +360,7 @@ class Home extends Component {
         link: addLink,
         title: results[0].title,
         imageLink: results[1].image,
+        description: results[2].description,
         uniqueId: token
       }),
     })
@@ -336,6 +387,20 @@ class Home extends Component {
 
   }
 
+  // deleteFromDb() {
+
+
+  //   fetch('/api/deletearticle', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': "application/json"
+  //     },
+
+  //     })
+
+  //   this.renderArticles()
+
+  // }
 
   renderArticles() {
     // grab state
@@ -360,7 +425,7 @@ class Home extends Component {
         if (json) {
 
           console.log("success")
-          this.setState({appendArticles: json})
+          this.setState({ appendArticles: json })
 
           console.log(this.state)
         } else {
@@ -518,8 +583,10 @@ class Home extends Component {
 
     return (
 
+
+
       <div className='container'>
-        <h1 className='center-align'>Dashboard</h1>
+        <h1 className='center-align'>My Articles</h1>
         <div className="row">
           <div className="col s12">
             <div className="card blue-grey darken-1">
@@ -534,13 +601,31 @@ class Home extends Component {
                 <br /><br />
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
-                {this.state.appendArticles.map(article =>
-                
-                  <div>
-                  <img src={article.imageLink}/>
-                  <a href={article.link} target="_blank">{article.title}</a></div>)}
+                {this.state.appendArticles.slice(0).reverse().map(article =>
+
+                  <div className='row'>
+                    <div className='col s6 m3'>
+                      <div className='card'>
+                        <div className='card-image'>
+                          <img src={article.imageLink} alt="placeholder" />
+                          <span className='card-title'>{article.title}</span>
+                        </div>
+                        <div className='card-content'>
+                          <p style={descriptionTextStyle}>{article.description}</p>
+                        </div>
+                        <div className='card-action'>
+                          <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
+                        </div>
+                        {/* <div className='card-action'>
+                          <a href='#'>Delete Article</a>
+                        </div> */}
+                      </div>
+                    </div>
+                  </div>
+
+                )}
               </div>
-              
+
             </div>
           </div>
         </div>
