@@ -158,7 +158,8 @@ module.exports = (app) => {
                     return res.send({
                         success: true,
                         message: 'valid sign in',
-                        token: doc._id
+                        token: doc._id,
+                        userId: userSession.userId
                     })
                 })
         })
@@ -244,9 +245,6 @@ module.exports = (app) => {
             uniqueId
         } = body;
 
-        console.log('body:', body)
-
-
         if (!link) {
             return res.send({
                 success: false,
@@ -274,6 +272,7 @@ module.exports = (app) => {
                 message: 'Article saved!'
             });
         });
+        
 
     });
 
@@ -281,8 +280,11 @@ module.exports = (app) => {
 
     app.post('/api/appendarticle', (req, res) => {
 
+        // console.log(req.body)
+
         Articles
-            .find(req.query)
+            .find( { uniqueId: req.body.uniqueId } )
+            // .find(req.query)
             // .sort({link})
             .then(Articles => res.json(Articles))
             .catch(err => res.status(422).json(err))
@@ -290,24 +292,17 @@ module.exports = (app) => {
 
     });
 
-    // app.post('/api/deletearticle', (req, res) => {
-    //     // const { body } = req;
-    //     // const {
-    //     //         link,
-    //     // } = body;
+    app.delete('/api/deletearticle', (req, res) => {
+       
+console.log(req.body)
+        // Articles
+        // .find(req.query)
+        // // .sort({link})
+        // .then(Articles => Articles.remove())
+        // .then(Articles => res.json(Articles))
+        // .catch(err => res.status(422).json(err))
+        // // console.log(res)
 
-
-
-    //     // console.log('body:', body)
-
-    //     Articles
-    //     .find(req.query)
-    //     // .sort({link})
-    //     .then(Articles => Articles.remove())
-    //     .then(Articles => res.json(Articles))
-    //     .catch(err => res.status(422).json(err))
-    //     // console.log(res)
-
-    // });
+    });
 
 };
