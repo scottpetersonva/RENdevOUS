@@ -334,53 +334,53 @@ class Home extends Component {
   // }
 
   // post request to backend
-  postToDb() {
+  // postToDb() {
 
-    const {
-      addLink,
-      token,
-      results,
-      // appendArticles
+  //   const {
+  //     addLink,
+  //     token,
+  //     results,
+  //     // appendArticles
 
-    } = this.state;
+  //   } = this.state;
 
-    fetch('/api/addarticle', {
-      method: 'POST',
-      headers: {
-        'Content-Type': "application/json"
-      },
+  //   fetch('/api/addarticle', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': "application/json"
+  //     },
 
 
-      body: JSON.stringify({
-        link: addLink,
-        title: results[0].title,
-        imageLink: results[1].image,
-        description: results[2].description,
-        uniqueId: token
-      }),
-    })
-      .then(res => res.json())
-      .then(json => {
-        // console.log('json', json)
-        // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
-        // console.log('token', token)
-        if (json.success) {
-          this.setState({
-            addLink: '',
-            results: [],
-          })
-        } else {
-          this.setState({
-            // signUpError: json.message,
+  //     body: JSON.stringify({
+  //       link: addLink,
+  //       title: results[0].title,
+  //       imageLink: results[1].image,
+  //       description: results[2].description,
+  //       uniqueId: token
+  //     }),
+  //   })
+  //     .then(res => res.json())
+  //     .then(json => {
+  //       // console.log('json', json)
+  //       // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
+  //       // console.log('token', token)
+  //       if (json.success) {
+  //         this.setState({
+  //           addLink: '',
+  //           results: [],
+  //         })
+  //       } else {
+  //         this.setState({
+  //           // signUpError: json.message,
 
-            isLoading: false,
-          })
-        }
-      })
+  //           isLoading: false,
+  //         })
+  //       }
+  //     })
 
-    this.renderArticles()
+  //   this.renderArticles()
 
-  }
+  // }
 
   // Bring articles back to the frontend and display on client device
   renderArticles() {
@@ -486,7 +486,8 @@ class Home extends Component {
     // Nead to break the code below into individual components: sign up and sign in
 
     // broke when i started adding values to the below code
-    if (!token) {
+    if (!token) 
+    {
       return (
         <div className='container'>
           <div className="row">
@@ -564,58 +565,58 @@ class Home extends Component {
       )
     }
 
-    return (
+    // return (
 
 
 
-      <div className='container'>
-        <h1 className='center-align'>My Articles</h1>
-        <div className="row">
-          <div className="col s12">
-            <div className="card blue-grey darken-1">
-              <div className="card-content white-text">
-                <span className="card-title">Add an Article</span>
+    //   <div className='container'>
+    //     <h1 className='center-align'>My Articles</h1>
+    //     <div className="row">
+    //       <div className="col s12">
+    //         <div className="card blue-grey darken-1">
+    //           <div className="card-content white-text">
+    //             <span className="card-title">Add an Article</span>
 
-                <input
-                  type="text"
-                  placeholder="Add Link"
-                  value={addLink}
-                  onChange={this.onTextBoxChangeAddLink} />
-                <br /><br />
-                {/* <button className='btn' onClick={this.onAddLink}>Save Article</button> */}
-                <br /><br />
-                {this.state.appendArticles.slice(0).reverse().map(article =>
+    //             <input
+    //               type="text"
+    //               placeholder="Add Link"
+    //               value={addLink}
+    //               onChange={this.onTextBoxChangeAddLink} />
+    //             <br /><br />
+    //             {/* <button className='btn' onClick={this.onAddLink}>Save Article</button> */}
+    //             <br /><br />
+    //             {this.state.appendArticles.slice(0).reverse().map(article =>
 
-                  <div className='row'>
-                    <div className='col s6 m3'>
-                      <div className='card'>
-                        <div className='card-image'>
-                          <img src={article.imageLink || "https://media.giphy.com/media/9J7tdYltWyXIY/giphy.gif"} alt="placeholder" />
-                          <span className='card-title'>{article.title}</span>
-                        </div>
-                        <div className='card-content'>
-                          <p style={descriptionTextStyle}>{article.description}</p>
-                        </div>
-                        <div className='card-action'>
-                          <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
-                        </div>
-                        {/* <div className='card-action'>
-                          <a href='#'>Delete Article</a>
-                        </div> */}
-                      </div>
-                    </div>
-                  </div>
+    //               <div className='row'>
+    //                 <div className='col s6 m3'>
+    //                   <div className='card'>
+    //                     <div className='card-image'>
+    //                       <img src={article.imageLink || "https://media.giphy.com/media/9J7tdYltWyXIY/giphy.gif"} alt="placeholder" />
+    //                       <span className='card-title'>{article.title}</span>
+    //                     </div>
+    //                     <div className='card-content'>
+    //                       <p style={descriptionTextStyle}>{article.description}</p>
+    //                     </div>
+    //                     <div className='card-action'>
+    //                       <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
+    //                     </div>
+    //                     {/* <div className='card-action'>
+    //                       <a href='#'>Delete Article</a>
+    //                     </div> */}
+    //                   </div>
+    //                 </div>
+    //               </div>
 
-                )}
-              </div>
+    //             )}
+    //           </div>
 
-            </div>
-          </div>
-        </div>
-        <button className='btn' onClick={this.logout}>Logout</button>
-      </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //     <button className='btn' onClick={this.logout}>Logout</button>
+    //   </div>
 
-    );
+    // );
   }
 }
 
