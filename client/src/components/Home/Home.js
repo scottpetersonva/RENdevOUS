@@ -9,9 +9,9 @@ import {
 // const request = require("request");
 
 
-const descriptionTextStyle = {
-  color: 'black',
-}
+// const descriptionTextStyle = {
+//   color: 'black',
+// }
 
 
 class Home extends Component {
@@ -467,7 +467,7 @@ class Home extends Component {
   render() {
     const {
       isLoading,
-      token,
+      // token,
       signInError,
       signInEmail,
       signInPassword,
@@ -476,7 +476,7 @@ class Home extends Component {
       signUpEmail,
       signUpPassword,
       signUpError,
-      addLink,
+      // addLink,
       // uniqueId
     } = this.state;
 
@@ -486,8 +486,8 @@ class Home extends Component {
     // Nead to break the code below into individual components: sign up and sign in
 
     // broke when i started adding values to the below code
-    if (!token) 
-    {
+    // if (!token) 
+    // {
       return (
         <div className='container'>
           <div className="row">
@@ -563,60 +563,60 @@ class Home extends Component {
           </div>
         </div>
       )
-    }
+    // }
 
-    return (
+    // return (
 
 
 
-      <div className='container'>
-        <h1 className='center-align'>My Articles</h1>
-        <div className="row">
-          <div className="col s12">
-            <div className="card blue-grey darken-1">
-              <div className="card-content white-text">
-                <span className="card-title">Add an Article</span>
+    //   <div className='container'>
+    //     <h1 className='center-align'>My Articles</h1>
+    //     <div className="row">
+    //       <div className="col s12">
+    //         <div className="card blue-grey darken-1">
+    //           <div className="card-content white-text">
+    //             <span className="card-title">Add an Article</span>
 
-                <input
-                  type="text"
-                  placeholder="Add Link"
-                  value={addLink}
-                  onChange={this.onTextBoxChangeAddLink} />
-                <br /><br />
-                {/* <button className='btn' onClick={this.onAddLink}>Save Article</button> */}
-                <br /><br />
-                {this.state.appendArticles.slice(0).reverse().map(article =>
+    //             <input
+    //               type="text"
+    //               placeholder="Add Link"
+    //               value={addLink}
+    //               onChange={this.onTextBoxChangeAddLink} />
+    //             <br /><br />
+    //             {/* <button className='btn' onClick={this.onAddLink}>Save Article</button> */}
+    //             <br /><br />
+    //             {this.state.appendArticles.slice(0).reverse().map(article =>
 
-                  <div className='row'>
-                    <div className='col s6 m3'>
-                      <div className='card'>
-                        <div className='card-image'>
-                          <img src={article.imageLink || "https://media.giphy.com/media/9J7tdYltWyXIY/giphy.gif"} alt="placeholder" />
-                          <span className='card-title'>{article.title}</span>
-                        </div>
-                        <div className='card-content'>
-                          <p style={descriptionTextStyle}>{article.description}</p>
-                        </div>
-                        <div className='card-action'>
-                          <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
-                        </div>
-                        {/* <div className='card-action'>
-                          <a href='#'>Delete Article</a>
-                        </div> */}
-                      </div>
-                    </div>
-                  </div>
+    //               <div className='row'>
+    //                 <div className='col s6 m3'>
+    //                   <div className='card'>
+    //                     <div className='card-image'>
+    //                       <img src={article.imageLink || "https://media.giphy.com/media/9J7tdYltWyXIY/giphy.gif"} alt="placeholder" />
+    //                       <span className='card-title'>{article.title}</span>
+    //                     </div>
+    //                     <div className='card-content'>
+    //                       <p style={descriptionTextStyle}>{article.description}</p>
+    //                     </div>
+    //                     <div className='card-action'>
+    //                       <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
+    //                     </div>
+    //                     {/* <div className='card-action'>
+    //                       <a href='#'>Delete Article</a>
+    //                     </div> */}
+    //                   </div>
+    //                 </div>
+    //               </div>
 
-                )}
-              </div>
+    //             )}
+    //           </div>
 
-            </div>
-          </div>
-        </div>
-        <button className='btn' onClick={this.logout}>Logout</button>
-      </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //     <button className='btn' onClick={this.logout}>Logout</button>
+    //   </div>
 
-    );
+    // );
   }
 }
 
