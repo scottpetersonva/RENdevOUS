@@ -1,6 +1,6 @@
 # RENdevOUS
 
-This app allows developers to save articles that they find useful.  Bookmarks are boring and often do not give the user a description of the article saved.  RENdevOUS is visually appealing and gives the user an array of information about an article by simply saving a link
+This app allows developers to save articles that they find useful.  Bookmarks are boring and often do not give the user a description of the article saved.  RENdevOUS is visually appealing and gives the user an array of information about an article by simply saving a link.  Each user is given a unique dashboard given them a personalized experience.
 
 ## Link to App
 
