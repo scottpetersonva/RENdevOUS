@@ -11,8 +11,9 @@ const Header = () => (
     
     <nav>
     <div className="container">
-    <Link to="/">Home</Link> <span> | </span>
-      <Link to="/helloworld">About</Link>
+    <Link to="/">Home</Link> 
+    {/* <span> | </span> */}
+      {/* <Link to="/helloworld">About</Link> */}
       </div>
     </nav>    
 
