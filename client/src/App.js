@@ -6,8 +6,9 @@ import Header from "./components/Header";
 import HelloWorld from "./components/HelloWorld/HelloWorld";
 
 const App = () => (
+  
   <Router>
-    <div>
+    <div className="black">
       <Header />
       <Switch>
         <Route exact path="/" component={Home} />

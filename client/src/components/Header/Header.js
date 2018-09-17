@@ -4,14 +4,10 @@ import React from 'react';
 
 const Header = () => (
   
-  <header>
-    
-    
-    
-    
-    <nav>
-    <div class="nav-wrapper">
-      <a class="brand-logo center">RENdevOUS</a>
+  <header className="grey">
+    <nav className="grey">
+    <div className="nav-wrapper">
+      <a className="brand-logo center">RENdevOUS</a>
     </div>
   </nav>    
 

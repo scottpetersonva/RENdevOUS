@@ -402,12 +402,12 @@ this.renderArticles()
 
 
       <div className='container'>
-        <h1 className='center-align'>My Articles</h1>
         <div className="row">
           <div className="col s12">
             <div className="card blue-grey darken-1">
               <div className="card-content white-text">
                 <span className="card-title">Add an Article</span>
+                
 
                 <input
                   type="text"
@@ -421,6 +421,7 @@ this.renderArticles()
                 </div>
                 </div>
                 </div>
+                <h3 className='center-align white-text'>My Articles</h3>
                 <div className="row">
           <div className="col m6">
                 <div className="card blue-grey darken-1">
@@ -438,7 +439,8 @@ this.renderArticles()
                           <p style={descriptionTextStyle}>{article.description}</p>
                         </div>
                         <div className='card-action'>
-                          <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
+                          <a href={article.link} target="_blank">Read Article</a>
+                           {/* | <a onClick={this.deleteFromDb}>Delete Article</a> */}
                         </div>
                         {/* <div className='card-action'>
                           <a href='#'>Delete Article</a>
