@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const Header = () => (
   
@@ -10,12 +10,10 @@ const Header = () => (
     
     
     <nav>
-    <div className="container">
-    <Link to="/">Home</Link> 
-    {/* <span> | </span> */}
-      {/* <Link to="/helloworld">About</Link> */}
-      </div>
-    </nav>    
+    <div class="nav-wrapper">
+      <a class="brand-logo center">RENdevOUS</a>
+    </div>
+  </nav>    
 
   </header>
 
